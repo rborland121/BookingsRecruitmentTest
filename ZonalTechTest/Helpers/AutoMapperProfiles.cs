@@ -12,6 +12,7 @@ namespace ZonalTechTest.Helpers
                 .ForMember(dest => dest.RocketId, opt => opt.MapFrom(src => src.Rocket.RocketId));
             CreateMap<SpaceXRocketDTO, Rocket>();
             CreateMap<Launch, LaunchDTO>();
+            CreateMap<SpaceXRocketDTO, RocketDTO>();
         }
     }
 }
