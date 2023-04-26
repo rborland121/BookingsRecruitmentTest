@@ -10,11 +10,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpClient();
 builder.Services.AddAutoMapper(typeof(LaunchCommandRepository).Assembly);
 
 builder.Services.AddSingleton<DapperConnectionProvider>();
 
 builder.Services.AddScoped<ILaunchBL, LaunchBL>();
+builder.Services.AddScoped<IRocketBL, RocketBL>();
+builder.Services.AddScoped<ISpaceXAPI, SpaceXAPI>();
 builder.Services.AddScoped<ILaunchCommandRepository, LaunchCommandRepository>();
 builder.Services.AddScoped<IRocketCommandRepository, RocketCommandRepository>();
 builder.Services.AddScoped<ILaunchQueryRepository, LaunchQueryRepository>();

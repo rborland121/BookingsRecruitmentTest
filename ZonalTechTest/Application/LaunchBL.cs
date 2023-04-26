@@ -7,20 +7,20 @@ namespace ZonalTechTest.Application
 {
     public class LaunchBL : ILaunchBL
     {
-        IMapper _mapper;
-        ILaunchCommandRepository _launchCommandRepo;
-        IRocketCommandRepository _rocketCommandRepo;
+        private readonly IMapper _mapper;
+        private readonly ILaunchCommandRepository _launchCommandRepo;
+        private readonly IRocketCommandRepository _rocketCommandRepo;
+        private readonly ILaunchQueryRepository _launchQueryRepo;
+        private readonly ISpaceXAPI _api;
 
-        ILaunchQueryRepository _launchQueryRepo;
-        SpaceXAPI _api;
-
-        public LaunchBL(IMapper mapper, ILaunchCommandRepository launchCommandRepo, IRocketCommandRepository rocketCommandRepo, ILaunchQueryRepository launchQueryRepo)
+        public LaunchBL(IMapper mapper, ILaunchCommandRepository launchCommandRepo,
+            IRocketCommandRepository rocketCommandRepo, ILaunchQueryRepository launchQueryRepo, ISpaceXAPI api)
         {
             _mapper = mapper;
             _launchCommandRepo = launchCommandRepo;
             _rocketCommandRepo = rocketCommandRepo;
             _launchQueryRepo = launchQueryRepo;
-            _api = new SpaceXAPI();
+            _api = api;
         }
 
         public async void AddLaunchAsync(int launchId)

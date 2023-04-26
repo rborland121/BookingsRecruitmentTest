@@ -1,21 +1,21 @@
-﻿using ZonalTechTest.DataObjects;
-
+﻿using System.Net.Http;
+using ZonalTechTest.DataObjects;
 namespace ZonalTechTest.Application;
 
-
-public class SpaceXAPI
+public class SpaceXAPI : ISpaceXAPI
 {
-    private const string BASE_URL = "https://api.spacexdata.com/v3/";
-    private const string LAUNCH_ENDPOINT = "launches";
+    private IHttpClientFactory _httpClientFactory;
+    public const string BASE_URL = "https://api.spacexdata.com/v3/";
+    public const string LAUNCH_ENDPOINT = "launches";
+    public const string ROCKET_ENDPOINT = "rockets";
 
+    public SpaceXAPI(IHttpClientFactory httpClientFactory) => _httpClientFactory = httpClientFactory;
 
-    HttpClient client = new HttpClient();
-
-    public async Task<SpaceXLaunchDTO> GetLaunchDataAsync(int launchId = 0)
+    public async Task<SpaceXLaunchDTO?> GetLaunchDataAsync(int launchId = 0)
     {
         string path = $"{BASE_URL}{LAUNCH_ENDPOINT}/";
         string addVariable = launchId == 0 ? "" : launchId.ToString();
-        var response = await client.GetAsync(path + addVariable);
+        var response = await GetHttpClient().GetAsync(path + addVariable);
 
         if (response.IsSuccessStatusCode)
         {
@@ -23,5 +23,36 @@ public class SpaceXAPI
         }
 
         return null;
+    }
+
+    public async Task<SpaceXRocketDTO?> GetSpaceXRocketDataAsync(string rocketId)
+    {
+        string path = $"{BASE_URL}{ROCKET_ENDPOINT}/";
+        var response = await GetHttpClient().GetAsync(path + rocketId);
+
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadFromJsonAsync<SpaceXRocketDTO>();
+        }
+
+        return null;
+    }
+
+    public async Task<IEnumerable<SpaceXRocketDTO>?> GetAllSpaceXRocketDataAsync()
+    {
+        string path = $"{BASE_URL}{ROCKET_ENDPOINT}";
+        var response = await GetHttpClient().GetAsync(path);
+
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadFromJsonAsync<IEnumerable<SpaceXRocketDTO>>();
+        }
+
+        return null;
+    }
+
+    private HttpClient GetHttpClient()
+    {
+        return _httpClientFactory.CreateClient();
     }
 }
