@@ -10,21 +10,34 @@ namespace ZonalTechTest.Controllers;
 [Route("[controller]/[action]")]
 public class LaunchController : ControllerBase
 {
-    private ILaunchBL _launchBL;
-    public LaunchController(ILaunchBL launchBL)
+    private readonly ILaunchBL _launchBl;
+
+    public LaunchController(ILaunchBL launchBl)
     {
-        _launchBL = launchBL;
+        _launchBl = launchBl;
     }
 
     [HttpGet]
-    public async Task<IEnumerable<LaunchDTO>> GetLaunch([FromQuery] int flightNumber)
-        => await _launchBL.GetLaunchAsync(flightNumber);
-    
+    public async Task<LaunchDTO?> GetLaunch([FromQuery] int flightNumber)
+        => await _launchBl.GetLaunchAsync(flightNumber);
 
-    [HttpPost("/{flightNumber}")]
-    public async Task<NoContentResult> AddLaunch(int flightNumber)
+    [HttpGet]
+    public async Task<IEnumerable<LaunchDTO>> GetAllLaunches()
+        => await _launchBl.GetLaunchesAsync();
+
+
+    [HttpPost("{flightNumber}")]
+    public async Task<IActionResult> AddOrUpdate(int flightNumber)
     {
-        _launchBL.AddLaunchAsync(flightNumber);
+        bool success = await _launchBl.AddLaunchAsync(flightNumber);
+
+        return success ? NoContent() : BadRequest("Couldn't find SpaceX flight: " + flightNumber);
+    }
+
+    [HttpDelete("{flightNumber}")]
+    public async Task<NoContentResult> Delete(int flightNumber)
+    {
+        await _launchBl.DeleteLaunchAsync(flightNumber);
 
         return NoContent();
     }

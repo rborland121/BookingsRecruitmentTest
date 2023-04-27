@@ -15,7 +15,7 @@ public class RocketCommandRepository : IRocketCommandRepository
     public async Task<bool> AddRocketAsync(Rocket rocket)
     {
         string sql = @"
-                    INSERT INTO Rocket(RocketId, RocketName, RocketType)
+                    INSERT OR REPLACE INTO Rocket(RocketId, RocketName, RocketType)
                     VALUES(@RocketId, @RocketName, @RocketType)
                 ";
 

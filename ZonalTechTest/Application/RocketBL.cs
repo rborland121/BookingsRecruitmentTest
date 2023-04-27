@@ -14,9 +14,14 @@ namespace ZonalTechTest.Application
             _api = api;
         }
 
-        public async Task<RocketDTO> GetRocketAsync(string rocketId)
+        public async Task<RocketDTO?> GetRocketAsync(string rocketId)
         {
-            var spaceXRocketDto = await _api.GetSpaceXRocketDataAsync(rocketId);
+            if (string.IsNullOrEmpty(rocketId))
+            {
+                return null;
+            }
+
+            var spaceXRocketDto = await _api.GetRocketDataAsync(rocketId);
             var rocket = _mapper.Map<RocketDTO>(spaceXRocketDto);
 
             return rocket;
@@ -24,8 +29,8 @@ namespace ZonalTechTest.Application
 
         public async Task<IEnumerable<RocketDTO>> GetAllRocketsAsync()
         {
-            var spaceXRocketDtoData = await _api.GetAllSpaceXRocketDataAsync();
-            var rockets = _mapper.Map<IEnumerable<SpaceXRocketDTO>, IEnumerable<RocketDTO>>(spaceXRocketDtoData);
+            var spaceXRocketDtoData = await _api.GetAllRocketDataAsync();
+            var rockets = _mapper.Map<IEnumerable<SpaceXRocketDTO>, IEnumerable<RocketDTO>>(spaceXRocketDtoData!);
 
             return rockets;
         }

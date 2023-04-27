@@ -4,7 +4,7 @@ namespace ZonalTechTest.Application;
 
 public interface ISpaceXAPI
 {
-    Task<SpaceXLaunchDTO?> GetLaunchDataAsync(int launchId = 0);
-    Task<SpaceXRocketDTO?> GetSpaceXRocketDataAsync(string rocketId);
-    Task<IEnumerable<SpaceXRocketDTO>?> GetAllSpaceXRocketDataAsync();
+    Task<SpaceXLaunchDTO?> GetLaunchDataAsync(int flightNumber = 0);
+    Task<SpaceXRocketDTO?> GetRocketDataAsync(string rocketId);
+    Task<IEnumerable<SpaceXRocketDTO>?> GetAllRocketDataAsync();
 }

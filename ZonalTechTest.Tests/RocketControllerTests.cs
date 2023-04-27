@@ -1,9 +1,5 @@
-﻿using NSubstitute;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using NSubstitute;
 using Xunit;
 using ZonalTechTest.Application;
 using ZonalTechTest.Controllers;
@@ -21,17 +17,19 @@ namespace ZonalTechTest.Tests
             _sut = new RocketController(_rocketBl);
         }
 
-        [Fact]
-        public async void GetRocket_ShouldCallGetRocketAsync_WithRocketId()
+        [Theory]
+        [InlineData("anything")]
+        [InlineData("")]
+        [InlineData(null)]
+        public async Task GetRocket_ShouldCallBusinessLayer_WithAnyRocketId(string rocketId)
         {
-            var rocketId = "anything";
             await _sut.GetRocket(rocketId);
 
             await _rocketBl.Received().GetRocketAsync(rocketId);
         }
 
         [Fact]
-        public async void GetAllRocketsAsync_ShouldCallGetRocketAsync_WithRocketId()
+        public async Task GetAllRocketsAsync_ShouldCallBusinessLayer()
         {
             await _sut.GetAllRockets();
 

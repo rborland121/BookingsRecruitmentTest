@@ -9,15 +9,15 @@ namespace ZonalTechTest.Controllers
     [Route("[controller]/[action]")]
     public class RocketController : ControllerBase
     {
-        private IRocketBL _rocketBl;
+        private readonly IRocketBL _rocketBl;
 
-        public RocketController(IRocketBL rocketBL)
+        public RocketController(IRocketBL rocketBl)
         {
-            _rocketBl = rocketBL;
+            _rocketBl = rocketBl;
         }
 
         [HttpGet]
-        public async Task<RocketDTO> GetRocket([FromQuery] string rocketId)
+        public async Task<RocketDTO?> GetRocket([FromQuery] string rocketId)
             => await _rocketBl.GetRocketAsync(rocketId);
 
         [HttpGet]

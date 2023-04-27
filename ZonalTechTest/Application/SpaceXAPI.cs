@@ -4,17 +4,18 @@ namespace ZonalTechTest.Application;
 
 public class SpaceXAPI : ISpaceXAPI
 {
-    private IHttpClientFactory _httpClientFactory;
     public const string BASE_URL = "https://api.spacexdata.com/v3/";
     public const string LAUNCH_ENDPOINT = "launches";
     public const string ROCKET_ENDPOINT = "rockets";
 
+    private readonly IHttpClientFactory _httpClientFactory;
+
     public SpaceXAPI(IHttpClientFactory httpClientFactory) => _httpClientFactory = httpClientFactory;
 
-    public async Task<SpaceXLaunchDTO?> GetLaunchDataAsync(int launchId = 0)
+    public async Task<SpaceXLaunchDTO?> GetLaunchDataAsync(int flightNumber = 0)
     {
         string path = $"{BASE_URL}{LAUNCH_ENDPOINT}/";
-        string addVariable = launchId == 0 ? "" : launchId.ToString();
+        string addVariable = flightNumber == 0 ? "" : flightNumber.ToString();
         var response = await GetHttpClient().GetAsync(path + addVariable);
 
         if (response.IsSuccessStatusCode)
@@ -25,7 +26,7 @@ public class SpaceXAPI : ISpaceXAPI
         return null;
     }
 
-    public async Task<SpaceXRocketDTO?> GetSpaceXRocketDataAsync(string rocketId)
+    public async Task<SpaceXRocketDTO?> GetRocketDataAsync(string rocketId)
     {
         string path = $"{BASE_URL}{ROCKET_ENDPOINT}/";
         var response = await GetHttpClient().GetAsync(path + rocketId);
@@ -38,7 +39,7 @@ public class SpaceXAPI : ISpaceXAPI
         return null;
     }
 
-    public async Task<IEnumerable<SpaceXRocketDTO>?> GetAllSpaceXRocketDataAsync()
+    public async Task<IEnumerable<SpaceXRocketDTO>?> GetAllRocketDataAsync()
     {
         string path = $"{BASE_URL}{ROCKET_ENDPOINT}";
         var response = await GetHttpClient().GetAsync(path);

@@ -4,6 +4,8 @@ namespace ZonalTechTest.Application;
 
 public interface ILaunchBL
 {
-    void AddLaunchAsync(int launchId);
-    Task<IEnumerable<LaunchDTO>> GetLaunchAsync(int flightNumber);
+    Task<bool> AddLaunchAsync(int flightNumber);
+    Task<LaunchDTO?> GetLaunchAsync(int flightNumber);
+    Task<bool> DeleteLaunchAsync(int flightNumber);
+    Task<IEnumerable<LaunchDTO>> GetLaunchesAsync();
 }

@@ -23,25 +23,37 @@ namespace ZonalTechTest.Application
             _api = api;
         }
 
-        public async void AddLaunchAsync(int launchId)
+        public async Task<bool> AddLaunchAsync(int flightNumber)
         {
-            var launchData = await _api.GetLaunchDataAsync(launchId);
+            var launchData = await _api.GetLaunchDataAsync(flightNumber);
 
-            if (launchData is null) { return; }
+            if (launchData is null)
+            {
+                return false;
+            }
 
             var launchEntity = _mapper.Map<Launch>(launchData);
             var rocketEntity = _mapper.Map<Rocket>(launchData.Rocket);
 
+            await _rocketCommandRepo.AddRocketAsync(rocketEntity);
             await _launchCommandRepo.AddLaunchAsync(launchEntity);
 
-            await _rocketCommandRepo.AddRocketAsync(rocketEntity);
+            return true;
         }
 
-        public async Task<IEnumerable<LaunchDTO>> GetLaunchAsync(int flightNumber)
+        public async Task<LaunchDTO?> GetLaunchAsync(int flightNumber)
         {
-            if (flightNumber == 0) return Enumerable.Empty<LaunchDTO>();
+            return flightNumber > 0 ? await _launchQueryRepo.GetLaunchAsync(flightNumber) : null;
+        }
 
-            return await _launchQueryRepo.GetLaunchAsync(flightNumber);
+        public async Task<bool> DeleteLaunchAsync(int flightNumber)
+        {
+            return flightNumber > 0 && await _launchCommandRepo.DeleteLaunchAsync(flightNumber);
+        }
+
+        public async Task<IEnumerable<LaunchDTO>> GetLaunchesAsync()
+        {
+            return await _launchQueryRepo.GetLaunchesAsync();
         }
     }
 }

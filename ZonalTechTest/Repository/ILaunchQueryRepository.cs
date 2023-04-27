@@ -4,5 +4,6 @@ namespace ZonalTechTest.Repository;
 
 public interface ILaunchQueryRepository
 {
-    Task<IEnumerable<LaunchDTO>> GetLaunchAsync(int flightNumber);
+    Task<LaunchDTO?> GetLaunchAsync(int flightNumber);
+    Task<IEnumerable<LaunchDTO>> GetLaunchesAsync();
 }

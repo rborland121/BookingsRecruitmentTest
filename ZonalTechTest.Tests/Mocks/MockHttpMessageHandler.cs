@@ -11,13 +11,13 @@ namespace ZonalTechTest.Tests.Mocks
 {
     public class MockHttpMessageHandler : HttpMessageHandler
     {
-        private HttpStatusCode _responseStatusCode;
+        private readonly HttpStatusCode _responseStatusCode;
 
         public MockHttpMessageHandler(HttpStatusCode statusCode)
         {
             _responseStatusCode = statusCode;
             MockHttpClientFactory = Substitute.For<IHttpClientFactory>();
-            var httpClient = new HttpClient(this) { BaseAddress = new Uri("https://localhost") };
+            var httpClient = new HttpClient(this);
             MockHttpClientFactory.CreateClient(Arg.Any<string>()).Returns(httpClient);
         }
 
@@ -25,7 +25,7 @@ namespace ZonalTechTest.Tests.Mocks
 
         public bool GetAsyncCalled { get; private set; }
 
-        public string GetAsyncPath { get; private set; }
+        public string? GetAsyncPath { get; private set; }
 
         public JsonContent? ResponseJsonContent { get; set; }
 
@@ -35,7 +35,7 @@ namespace ZonalTechTest.Tests.Mocks
             var httpResponseMessage = new HttpResponseMessage(_responseStatusCode);
             if (GetAsyncCalled)
             {
-                GetAsyncPath = request.RequestUri.OriginalString;
+                GetAsyncPath = request.RequestUri?.OriginalString;
                 httpResponseMessage.Content = ResponseJsonContent;
             }
 

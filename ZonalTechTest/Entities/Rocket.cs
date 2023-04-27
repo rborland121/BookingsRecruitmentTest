@@ -2,7 +2,7 @@
 
 public class Rocket
 {
-    public string RocketId { get; set; }
-    public string RocketName { get; set; }
-    public string RocketType { get; set; }
+    public string RocketId { get; set; } = null!;
+    public string RocketName { get; set; } = null!;
+    public string RocketType { get; set; } = null!;
 }
